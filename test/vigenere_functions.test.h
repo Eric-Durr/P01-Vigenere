@@ -13,7 +13,7 @@
 #include "../include/Catch2/catch.h"
 #include "../include/vigenere_functions.h"
 
-SCENARIO("Encoding strings")
+SCENARIO("Ciphering strings")
 {
     GIVEN("An input string and a keyword")
     {
@@ -73,7 +73,7 @@ SCENARIO("Encoding strings")
     }
 }
 
-SCENARIO("Decoding strings")
+SCENARIO("Deciphering  strings")
 {
     GIVEN("An encoded string and the original string")
     {

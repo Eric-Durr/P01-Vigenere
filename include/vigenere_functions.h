@@ -22,7 +22,6 @@ const int mod = alphabet_key_map.size();
 std::string compact(const std::string &input)
 {
     std::string result = "";
-    std::stringstream s_input(input);
     for (const auto letter : input)
     {
         if (letter != ' ')
@@ -30,6 +29,7 @@ std::string compact(const std::string &input)
     }
     return result;
 }
+
 std::vector<std::vector<std::string>> v_split(std::string input,
                                               const std::string &keyword)
 {
@@ -162,10 +162,10 @@ std::string join(const std::vector<std::vector<std::string>> &ciphered_output)
     return output;
 }
 
-std::string decipher(const std::string encoded_str, const std::string keyword)
+std::string decipher(const std::string ciphered_str, const std::string keyword)
 {
     std::vector<std::vector<std::string>> temporal;
-    std::vector<std::vector<std::string>> splitted = v_split(encoded_str, keyword);
+    std::vector<std::vector<std::string>> splitted = v_split(ciphered_str, keyword);
     for (auto block : splitted)
     {
         std::vector<std::string> dechipered_block;
