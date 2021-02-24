@@ -55,7 +55,7 @@ std::vector<std::vector<std::string>> v_split(std::string input,
     return result;
 }
 
-std::string encode(const std::string &letter,
+std::string cipher(const std::string &letter,
                    const std::string &keyword_letter)
 {
     int letter_pos = -1;
@@ -77,17 +77,57 @@ std::string encode(const std::string &letter,
     }
     else
     {
-        std::string encoded_letter;
+        std::string ciphered_letter;
         for (auto element : alphabet_key_map)
         {
             if (element.second == (letter_pos + key_letter_pos) % mod)
-                encoded_letter = element.first;
+                ciphered_letter = element.first;
         }
-        return encoded_letter;
+        return ciphered_letter;
     }
 }
 
-std::vector<std::vector<std::string>> v_encode(
+std::string decipher_element(const std::string &letter,
+                             const std::string &keyword_letter)
+{
+    int letter_pos = -1;
+    for (auto element : alphabet_key_map)
+    {
+        if (element.first == letter)
+            letter_pos = element.second;
+    }
+    int key_letter_pos = -1;
+    for (auto element : alphabet_key_map)
+    {
+        if (element.first == keyword_letter)
+            key_letter_pos = element.second;
+    }
+    if (letter_pos == -1 || key_letter_pos == -1)
+    {
+        return "?";
+    }
+    else
+    {
+        std::string deciphered_letter;
+        for (auto element : alphabet_key_map)
+        {
+            if ((letter_pos - key_letter_pos) >= 0)
+            {
+                if (element.second == (letter_pos - key_letter_pos) % mod)
+                    deciphered_letter = element.first;
+            }
+            else if ((letter_pos - key_letter_pos) < 0)
+            {
+
+                if (element.second == (letter_pos - key_letter_pos + mod) % mod)
+                    deciphered_letter = element.first;
+            }
+        }
+        return deciphered_letter;
+    }
+}
+
+std::vector<std::vector<std::string>> v_cipher(
     std::vector<std::vector<std::string>> input,
     const std::string &keyword)
 {
@@ -95,25 +135,24 @@ std::vector<std::vector<std::string>> v_encode(
     std::vector<std::vector<std::string>> result;
     for (auto block : input)
     {
-        std::vector<std::string> encoded_block;
+        std::vector<std::string> ciphered_block;
         int offset = 0;
         for (auto letter : block)
         {
-            encoded_block.push_back(encode(letter, std::string{keyword[offset]}));
+            ciphered_block.push_back(cipher(letter, std::string{keyword[offset]}));
             offset++;
         }
-        result.push_back(encoded_block);
+        result.push_back(ciphered_block);
     }
 
-    std::cout << "\n";
     return result;
 }
 
-std::string join(const std::vector<std::vector<std::string>> &encoded_output)
+std::string join(const std::vector<std::vector<std::string>> &ciphered_output)
 {
     std::string output = "";
 
-    for (auto block : encoded_output)
+    for (auto block : ciphered_output)
     {
         for (auto element : block)
         {
@@ -123,7 +162,21 @@ std::string join(const std::vector<std::vector<std::string>> &encoded_output)
     return output;
 }
 
-std::string decode(const std::string encoded_str)
+std::string decipher(const std::string encoded_str, const std::string keyword)
 {
-    return "hello";
+    std::vector<std::vector<std::string>> temporal;
+    std::vector<std::vector<std::string>> splitted = v_split(encoded_str, keyword);
+    for (auto block : splitted)
+    {
+        std::vector<std::string> dechipered_block;
+        int offset = 0;
+        for (auto letter : block)
+        {
+            dechipered_block.push_back(decipher_element(letter, std::string{keyword[offset]}));
+            offset++;
+        }
+        temporal.push_back(dechipered_block);
+    }
+
+    return join(temporal);
 }

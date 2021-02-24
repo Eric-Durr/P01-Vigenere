@@ -20,7 +20,7 @@ SCENARIO("Encoding strings")
         std::string keyword = "MISION";
         std::string input_text = "ESTE MENSAJE SE AUTODESTRUIRA";
         std::vector<std::vector<std::string>> splitted_input;
-        std::vector<std::vector<std::string>> encoded_output;
+        std::vector<std::vector<std::string>> ciphered_output;
         std::string formated_input;
         std::string formated_output;
         WHEN("initial formatting is applied")
@@ -52,7 +52,7 @@ SCENARIO("Encoding strings")
         {
             formated_input = compact(input_text);
             splitted_input = v_split(formated_input, keyword);
-            encoded_output = v_encode(splitted_input, keyword);
+            ciphered_output = v_cipher(splitted_input, keyword);
             THEN("the split must follow vigenere rules through encoding")
             {
                 std::vector<std::vector<std::string>> expected_endoded_map = {
@@ -61,10 +61,10 @@ SCENARIO("Encoding strings")
                     {"Q", "I", "M", "B", "C", "Q"},
                     {"Q", "A", "L", "Z", "I", "V"},
                     {"D", "I"}};
-                REQUIRE(encoded_output == expected_endoded_map);
+                REQUIRE(ciphered_output == expected_endoded_map);
             }
 
-            formated_output = join(encoded_output);
+            formated_output = join(ciphered_output);
             AND_THEN("the formated output must be right")
             {
                 REQUIRE(formated_output == "QALMARZASRSFQIMBCQQALZIVDI");
@@ -77,14 +77,15 @@ SCENARIO("Decoding strings")
 {
     GIVEN("An encoded string and the original string")
     {
-        std::string original = "ESTE MENSAJE SE AUTODESTRUIRA";
-        std::string encoded = "QALMARZASRSFQIMBCQQALZIVDI";
+        std::string keyword = "MISION";
+        std::string original = "ESTEMENSAJESEAUTODESTRUIRA";
+        std::string ciphered = "QALMARZASRSFQIMBCQQALZIVDI";
         WHEN("Passed into decoder")
         {
-            std::string decoded = decode(encoded);
+            std::string deciphered = decipher(ciphered, keyword);
             THEN("Original string and the decoded result must be the same")
             {
-                REQUIRE(decoded == original);
+                REQUIRE(deciphered == original);
             }
         }
     }
