@@ -23,7 +23,7 @@ DOCUMENTATION_PATH = docs
 
 # Executable file name 
 BIN_NAME = vigenere
-TEST_NAME = vigenere.test
+TEST_NAME = vigenere_test
 
 # File extentions
 SRC_EXT = cpp
