@@ -1,5 +1,22 @@
+/**
+ * Main program file for vigenere's ciphering 
+ * Contains the execution menu and handles the
+ * developed functions
+ * 
+ * Author: Eric Dürr Sierra | eric.durr.20@ull.edu.es
+ * 
+ * Created: 24/02/2021
+ * Modified: 25/02/2021
+ * 
+ * 
+ */
+
 #include <iostream>
+#include <regex>
 #include "../include/vigenere_functions.h"
+
+/* Text formart check function: throug a regular expresion validates the message to cipher */
+bool text_check(const std::string &input_str);
 
 int main(void)
 {
@@ -11,6 +28,7 @@ int main(void)
 
     while (1)
     {
+        op = 7;
         std::cout << "\n\n--MENÚ PARA EL CIFRADO DE VIGENERE--\n\n";
         std::cout << "\t1) Introducir mensaje\n";
         std::cout << "\t2) Encriptar mensaje\n";
@@ -28,14 +46,22 @@ int main(void)
 
         switch (op)
         {
-        case 1:
+        case 1: /* Message input: the user can insert a message to cypher */
             std::cout << "Mensaje: ";
             std::cin.ignore();
             std::getline(std::cin, message, '\n');
-            std::cout << "\n\n\t mensaje introducido: " << message << "\n";
-
+            if (text_check(message))
+            {
+                std::cout << "\n\n\t mensaje introducido: " << message << "\n";
+            }
+            else
+            {
+                message = "";
+                std::cout << "\n\n\t mensaje erroneo solo pueden ser palabras en mayúscula y sin Ñ, se pueden utilizar espacios pero no números ni signos de puntuación\n";
+            }
             break;
-        case 2:
+        case 2: /* Message Ciphering: when launched and if there is a message a keyword is asked, 
+                   then message passes to encrypted status */
             if (message.empty())
             {
                 std::cout << "--- No hay mensaje ---\n\n";
@@ -57,7 +83,8 @@ int main(void)
                 }
             }
             break;
-        case 3:
+        case 3: /* Message Deciphering: if there is a message, the user is asked for the keyword. 
+                   When the right keyword is introduced the message passes to deciphered status */
             if (message.empty())
             {
                 std::cout << "--- No hay mensaje ---\n\n";
@@ -85,7 +112,8 @@ int main(void)
             }
 
             break;
-        case 4:
+        case 4: /* Message Output: If there is a message it can be displayed at console whenever it 
+                   is ciphered or not. */
             if (message.empty())
             {
                 std::cout << "--- No hay mensaje ---\n\n";
@@ -110,4 +138,9 @@ int main(void)
     return 0;
 }
 
-/* INSTRUCCIÖN PARA COMPROBACIÓN DEL CONTENIDO DEL TEXTO -> REGEXP */
+/* INSTRUCCIÓN PARA COMPROBACIÓN DEL CONTENIDO DEL TEXTO -> REGEXP */
+bool text_check(const std::string &input_str)
+{
+    std::regex only_letters_and_spaces("[A-Z ]*$");
+    return std::regex_match(input_str, only_letters_and_spaces);
+}

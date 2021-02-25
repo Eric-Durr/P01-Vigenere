@@ -15,11 +15,12 @@
 #include <sstream>
 #include <iostream>
 
+/* Two constants: the alphabet map which we use to cypher and the size of the alphabet. */
 const std::vector<std::pair<std::string, int>> alphabet_key_map = {
     {"A", 0}, {"B", 1}, {"C", 2}, {"D", 3}, {"E", 4}, {"F", 5}, {"G", 6}, {"H", 7}, {"I", 8}, {"J", 9}, {"K", 10}, {"L", 11}, {"M", 12}, {"N", 13}, {"O", 14}, {"P", 15}, {"Q", 16}, {"R", 17}, {"S", 18}, {"T", 19}, {"U", 20}, {"V", 21}, {"W", 22}, {"X", 23}, {"Y", 24}, {"Z", 25}};
-
 const int mod = alphabet_key_map.size();
 
+/* Compact function used to erase all spaces of the message, this is helpfull for the splitting */
 std::string compact(const std::string &input)
 {
     std::string result = "";
@@ -31,6 +32,12 @@ std::string compact(const std::string &input)
     return result;
 }
 
+/* 
+    As long as we work with a structure composed by vectors of vectors that contains a single string (each letter);
+    the next function will split the input into that kind of structure. The split is based on the keyword length wich 
+    refers to the lenght of each bloc os string vectors pusshed into the main vector. 
+
+ */
 std::vector<std::vector<std::string>> v_split(std::string input,
                                               const std::string &keyword)
 {
@@ -56,6 +63,16 @@ std::vector<std::vector<std::string>> v_split(std::string input,
     return result;
 }
 
+/* 
+The cipher function will apply the vigenere's modular operation to a single 
+letter and the paired keyword letter.
+
+Two separated loops are used to find the number match in the alphabet match 
+const, each one for the message letter to cipher and the keyword letter.
+
+When both numbers are found then the module of the add is applied to obtain 
+the letter from the alphabet.
+*/
 std::string cipher(const std::string &letter,
                    const std::string &keyword_letter)
 {
@@ -87,7 +104,13 @@ std::string cipher(const std::string &letter,
         return ciphered_letter;
     }
 }
+/* 
+The decipher element function will decipher a single letter from the structure using the keyword letter.
 
+The number hunting is equal to the ciper funtion, a change is noticed when extracting the result letter from the alphabet.
+    - When the substract of the position numbers is positive is as simple as returning the module of the substract
+    - When the substract is negative it is necesary to add the module (alphabet size constant) to the substract, then module is applied.
+*/
 std::string decipher_element(const std::string &letter,
                              const std::string &keyword_letter)
 {
@@ -128,6 +151,10 @@ std::string decipher_element(const std::string &letter,
     }
 }
 
+/* 
+The vector ciphering will cover all the data structure calling the cipher function to
+form a new structure of the same kind wich contains the ciphered message
+ */
 std::vector<std::vector<std::string>> v_cipher(
     std::vector<std::vector<std::string>> input,
     const std::string &keyword)
@@ -149,6 +176,7 @@ std::vector<std::vector<std::string>> v_cipher(
     return result;
 }
 
+/* the join function will translate the created data structure into a string*/
 std::string join(const std::vector<std::vector<std::string>> &ciphered_output)
 {
     std::string output = "";
@@ -163,6 +191,10 @@ std::string join(const std::vector<std::vector<std::string>> &ciphered_output)
     return output;
 }
 
+/* 
+The vector ciphering will cover all the data structure calling the decipher_element function to
+form a new structure of the same kind wich contains the deciphered message
+ */
 std::string decipher(const std::string ciphered_str, const std::string keyword)
 {
     std::vector<std::vector<std::string>> temporal;
