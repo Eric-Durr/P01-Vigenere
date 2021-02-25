@@ -10,6 +10,7 @@
  * 
  */
 
+#include <vector>
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -39,7 +40,7 @@ std::vector<std::vector<std::string>> v_split(std::string input,
         if (!input.empty())
         {
             std::vector<std::string> tmp_str_block;
-            for (int i = 0; i < keyword.size(); i++)
+            for (unsigned int i = 0; i < keyword.size(); i++)
             {
                 if (input.empty())
                 {
