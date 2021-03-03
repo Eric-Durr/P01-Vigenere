@@ -71,9 +71,10 @@ int main(void)
                 if (ciphered_status == false)
                 {
                     std::cout << "Itroduzca una palabra clave: ";
-                    std::cin >> keyword;
+                    std::cin.ignore();
+                    std::getline(std::cin, keyword, '\n');
                     std::cout << "\n\n\t palabra clave introducida: " << keyword << "\n";
-
+                    keyword = compact(keyword);
                     message = join(v_cipher(v_split(compact(message), keyword), keyword));
                     ciphered_status = true;
                 }
@@ -82,6 +83,7 @@ int main(void)
                     std::cout << "\n\n\t mensaje ya cifrado \n";
                 }
             }
+
             break;
         case 3: /* Message Deciphering: if there is a message, the user is asked for the keyword. 
                    When the right keyword is introduced the message passes to deciphered status */
@@ -94,7 +96,9 @@ int main(void)
                 if (ciphered_status == true)
                 {
                     std::cout << "Itroduzca la palabra clave: ";
-                    std::cin >> temp_key;
+                    std::cin.ignore();
+                    std::getline(std::cin, temp_key, '\n');
+                    temp_key = compact(temp_key);
                     if (temp_key != keyword)
                     {
                         std::cout << "\n\nPalabra clave equivocada - saliendo de la opción";
@@ -132,7 +136,7 @@ int main(void)
         std::cout << "\n\t\tPulse enter para continuar...";
         getchar();
         getchar();
-        system("clear");
+        //system("clear");
     }
 
     return 0;

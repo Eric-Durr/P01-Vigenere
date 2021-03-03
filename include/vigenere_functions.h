@@ -64,6 +64,31 @@ std::vector<std::vector<std::string>> v_split(std::string input,
 }
 
 /* 
+The vector ciphering will cover all the data structure calling the cipher function to
+form a new structure of the same kind wich contains the ciphered message
+ */
+std::vector<std::vector<std::string>> v_cipher(
+    std::vector<std::vector<std::string>> input,
+    const std::string &keyword)
+{
+
+    std::vector<std::vector<std::string>> result;
+    for (auto block : input)
+    {
+        std::vector<std::string> ciphered_block;
+        int offset = 0;
+        for (auto letter : block)
+        {
+            ciphered_block.push_back(cipher(letter, std::string{keyword[offset]}));
+            offset++;
+        }
+        result.push_back(ciphered_block);
+    }
+
+    return result;
+}
+
+/* 
 The cipher function will apply the vigenere's modular operation to a single 
 letter and the paired keyword letter.
 
@@ -104,6 +129,30 @@ std::string cipher(const std::string &letter,
         return ciphered_letter;
     }
 }
+
+/* 
+The vector ciphering will cover all the data structure calling the decipher_element function to
+form a new structure of the same kind wich contains the deciphered message
+ */
+std::string decipher(const std::string ciphered_str, const std::string keyword)
+{
+    std::vector<std::vector<std::string>> temporal;
+    std::vector<std::vector<std::string>> splitted = v_split(ciphered_str, keyword);
+    for (auto block : splitted)
+    {
+        std::vector<std::string> dechipered_block;
+        int offset = 0;
+        for (auto letter : block)
+        {
+            dechipered_block.push_back(decipher_element(letter, std::string{keyword[offset]}));
+            offset++;
+        }
+        temporal.push_back(dechipered_block);
+    }
+
+    return join(temporal);
+}
+
 /* 
 The decipher element function will decipher a single letter from the structure using the keyword letter.
 
@@ -151,31 +200,6 @@ std::string decipher_element(const std::string &letter,
     }
 }
 
-/* 
-The vector ciphering will cover all the data structure calling the cipher function to
-form a new structure of the same kind wich contains the ciphered message
- */
-std::vector<std::vector<std::string>> v_cipher(
-    std::vector<std::vector<std::string>> input,
-    const std::string &keyword)
-{
-
-    std::vector<std::vector<std::string>> result;
-    for (auto block : input)
-    {
-        std::vector<std::string> ciphered_block;
-        int offset = 0;
-        for (auto letter : block)
-        {
-            ciphered_block.push_back(cipher(letter, std::string{keyword[offset]}));
-            offset++;
-        }
-        result.push_back(ciphered_block);
-    }
-
-    return result;
-}
-
 /* the join function will translate the created data structure into a string*/
 std::string join(const std::vector<std::vector<std::string>> &ciphered_output)
 {
@@ -189,27 +213,4 @@ std::string join(const std::vector<std::vector<std::string>> &ciphered_output)
         }
     }
     return output;
-}
-
-/* 
-The vector ciphering will cover all the data structure calling the decipher_element function to
-form a new structure of the same kind wich contains the deciphered message
- */
-std::string decipher(const std::string ciphered_str, const std::string keyword)
-{
-    std::vector<std::vector<std::string>> temporal;
-    std::vector<std::vector<std::string>> splitted = v_split(ciphered_str, keyword);
-    for (auto block : splitted)
-    {
-        std::vector<std::string> dechipered_block;
-        int offset = 0;
-        for (auto letter : block)
-        {
-            dechipered_block.push_back(decipher_element(letter, std::string{keyword[offset]}));
-            offset++;
-        }
-        temporal.push_back(dechipered_block);
-    }
-
-    return join(temporal);
 }
